@@ -1,4 +1,5 @@
 let WALL = 0,
+    LANDSCAPE = 2,
     performance = window.performance;
 
 // INIT
@@ -18,7 +19,7 @@ $(function () {
         diagonal: true,
     };
 
-    let grid = new GraphSearch($grid, opts, astar.search);
+    let grid = new GraphSearch($grid, opts);
 
     $inputGridRows.change(function () {
         grid.setOption({ rows: $(this).val() });
@@ -37,22 +38,7 @@ $(function () {
     $("#startSimulationForm").on("submit", e => {
         e.preventDefault();
 
-        // TODO: Fix this shit
-        var path = this.search(this.graph, start, end, {
-            closest: this.opts.closest
-        });
-        var fTime = performance ? performance.now() : new Date().getTime(),
-            duration = (fTime-sTime).toFixed(2);
-    
-        if(path.length === 0) {
-            $("#message").text("couldn't find a path (" + duration + "ms)");
-            this.animateNoPath();
-        }
-        else {
-            $("#message").text("search took " + duration + "ms.");
-            this.drawDebugInfo();
-            this.animatePath(path);
-        }
+        grid.search();
     });
 });
 
@@ -68,7 +54,6 @@ const css = {
 
 function GraphSearch($graph, options, implementation) {
     this.$graph = $graph;
-    this.search = implementation;
     this.opts = options;
     this.initialize();
 }
@@ -85,15 +70,11 @@ GraphSearch.prototype.initialize = function () {
 
     $graph.empty();
 
-    console.log(`Initializing with`, this.opts);
-
     let cellHeight = Math.max($graph.height() / this.opts.rows, 24),
         $cellTemplate = $("<span />")
             .addClass("grid_item col p-0")
             .height(cellHeight),
         startSet = false;
-
-    console.log($graph.height(), cellHeight);
 
     for (let x = 0; x < this.opts.rows; x++) {
         let $row = $("<div class='row' />"),
@@ -106,6 +87,7 @@ GraphSearch.prototype.initialize = function () {
             $cell.attr("id", id).attr("x", x).attr("y", y);
             $row.append($cell);
             gridRow.push($cell);
+            nodeRow.push(1);
         }
         $graph.append($row);
 
@@ -113,7 +95,9 @@ GraphSearch.prototype.initialize = function () {
         nodes.push(nodeRow);
     }
 
+    console.log(nodes);
     this.graph = new Graph(nodes);
+    console.log("GRapj", this.graph);
 
     // bind cell event
     this.$cells = $graph.find(".grid_item");
@@ -163,12 +147,54 @@ GraphSearch.prototype.cellClicked = function ($cell) {
             $start.removeClass();
             $start.addClass(`grid_item col p-0`);
         }
+    } else if(cursorName === css.water) {
+        const x = parseInt($cell.attr("x"));
+        const y = parseInt($cell.attr("y"));
+        
+        this.graph.grid[x][y].weight = WALL;
+        this.graph.nodes[x * this.opts.cols + y].weight = WALL;
+    } else if(cursorName === css.landscape) {
+        const x = parseInt($cell.attr("x"));
+        const y = parseInt($cell.attr("y"));
+        
+        this.graph.grid[x][y].weight = LANDSCAPE;
+        this.graph.nodes[x * this.opts.cols + y].weight = LANDSCAPE;
     }
 
     $cell.addClass(`grid_item col p-0 ${cursorName}`);
     $cell.html(getGoogleIcon(cursorName));
     $("body").css("cursor", "default");
 };
+
+GraphSearch.prototype.search = function() {
+    // TODO: Fix this shit
+    var sTime = performance ? performance.now() : new Date().getTime();
+
+    let $start = this.$cells.filter("." + css.start);
+    start = this.nodeFromElement($start);
+
+    let $end = this.$cells.filter("." + css.finish),
+    end = this.nodeFromElement($end);
+
+    let path = astar.search(this.graph, start, end);
+
+    console.log("Path", path);
+
+    let fTime = performance ? performance.now() : new Date().getTime(),
+        duration = (fTime-sTime).toFixed(2);
+
+    if(path.length === 0) {
+        alert("couldn't find a path (" + duration + "ms)");
+        $("#message").text("couldn't find a path (" + duration + "ms)");
+        this.animateNoPath();
+    }
+    else {
+        alert("search took " + duration + "ms.");
+        $("#message").text("search took " + duration + "ms.");
+        this.drawDebugInfo();
+        this.animatePath(path);
+    }
+}
 
 GraphSearch.prototype.nodeFromElement = function ($cell) {
     return this.graph.grid[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];

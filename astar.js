@@ -48,7 +48,7 @@
         search: function (graph, start, end, options) {
             graph.cleanDirty();
             options = options || {};
-            let heuristic = options.heuristic || astar.heuristics.manhattan;
+            let heuristic = options.heuristic || astar.heuristics.diagonal;
             let closest = options.closest || false;
 
             let openHeap = getHeap();
@@ -131,6 +131,7 @@
                 return d1 + d2;
             },
             diagonal: function (pos0, pos1) {
+                console.log(pos0, pos1);
                 let D = 1;
                 let D2 = Math.sqrt(2);
                 let d1 = Math.abs(pos1.x - pos0.x);
