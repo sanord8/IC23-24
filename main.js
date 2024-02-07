@@ -8,8 +8,8 @@ $(function () {
     $inputGridCols = $("#cols");
 
   let opts = {
-    rows: $inputGridRows.val(),
-    cols: $inputGridCols.val(),
+    rows: 10,
+    cols: 10,
     debug: true,
     diagonal: true,
   };
@@ -44,7 +44,7 @@ const css = {
 function GraphSearch($graph, options, implementation) {
   this.$graph = $graph;
   this.search = implementation;
-  this.opts = $.extend({ rows: 10, cols: 10 }, options);
+  this.opts = options;
   this.initialize();
 }
 
@@ -60,7 +60,7 @@ GraphSearch.prototype.initialize = function () {
 
   $graph.empty();
 
-  console.log(this.opts);
+  console.log(`Initializing with`, this.opts);
 
   let cellWidth = $graph.width() / this.opts.cols - 2, // -2 for borders
     cellHeight = $graph.height() / this.opts.rows - 2,
