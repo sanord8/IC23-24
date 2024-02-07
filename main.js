@@ -257,6 +257,6 @@ document.querySelectorAll("#icons .col").forEach((elem) => {
   elem.addEventListener("click", (e) => {
     document.getElementsByTagName(
       "body"
-    )[0].style.cursor = `url('images/${e.target.innerHTML}.cur'), auto`;
+    )[0].style.cursor = `url('images/${e.target.innerHTML}.cur') 37 37, auto`;
   });
 });
