@@ -1,6 +1,5 @@
 #search_grid  {
-	height: 75vh;
-	aspect-ratio : 1 / 1;
+	height: 90vh;
 }
 
 .clearfix:before,
@@ -14,35 +13,29 @@
 }
 
 .grid_item {
-    display: block;
     border: 1px solid #bbb;
-    float: left;
-    line-height: 12px;
-    font-size: 10px;
 }
 
-.grid_item.wall {
-    background-color: #000000;
+.grid_item.water {
+    background-color: #0d6efd;
 }
 
-.grid_item.weight1 {
-    background-color: #ffffff;
+.grid_item.camping {
+    background-color: #90ee90;
 }
 
-.grid_item.weight3 {
-    background-color: #D6EAFF;
+.grid_item.landscape {
+    background-color: #8b4513;
 }
 
-.grid_item.weight5 {
-    background-color: #ABD1FF;
-}
-
-.grid_item.start {
-    background-color: #FF703F;
+.grid_item.hiking {
+    background-color: #259f29;
 }
 
 .grid_item.active {
-    background-color: #FF703F;
+    background-color: #2edb34;
 }
 
-.grid_item.finish {}
+.grid_item.flag {
+    background-color: #fcc200;
+}
