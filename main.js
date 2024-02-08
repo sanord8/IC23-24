@@ -2,6 +2,9 @@ let WALL = 0,
     LANDSCAPE = 2,
     performance = window.performance;
 
+let isDragging = false;
+let draggedCells = [];
+
 // INIT
 $(function () {
     let $grid = $("#search_grid"),
@@ -95,14 +98,54 @@ GraphSearch.prototype.initialize = function () {
         nodes.push(nodeRow);
     }
 
-    console.log(nodes);
     this.graph = new Graph(nodes);
-    console.log("GRapj", this.graph);
 
     // bind cell event
     this.$cells = $graph.find(".grid_item");
-    this.$cells.click(function () {
-        self.cellClicked($(this));
+
+    // Drag and drop detection
+    this.$cells.on('mousedown', function (event) {
+        let cursor = $("body").css("cursor");
+        let cursorName = cursor.substring(
+            cursor.lastIndexOf("/") + 1,
+            cursor.lastIndexOf(".")
+        );
+
+        if(cursorName !== css.start && cursorName !== css.finish){
+            isDragging = true;
+        }
+        
+        if(event.target.classList.contains('grid_item'))
+            draggedCells.push(event.target);
+        else{
+            const targetCell = event.target.closest('.grid_item');
+            if (targetCell) {
+                draggedCells.push(targetCell);
+            }
+        }
+    });
+
+    this.$cells.on('mousemove', function (event) {
+        if (isDragging) {
+            const hoveredCell = document.elementFromPoint(event.clientX, event.clientY);
+            if (hoveredCell && hoveredCell.classList.contains('grid_item')) {
+                if (!draggedCells.includes(hoveredCell)) {
+                    draggedCells.push(hoveredCell);
+                }
+            }
+        }
+    });
+
+    this.$cells.on('mouseup', function (event) {
+        isDragging = false;
+        if(draggedCells.length !== 0) {
+            console.log(draggedCells);
+            for(let x in draggedCells){
+                self.cellClicked($(draggedCells[x]));
+            }
+        }
+        draggedCells = [];
+        $("body").css("cursor", "default");
     });
 };
 
@@ -147,26 +190,25 @@ GraphSearch.prototype.cellClicked = function ($cell) {
             $start.removeClass();
             $start.addClass(`grid_item col p-0`);
         }
-    } else if(cursorName === css.water) {
+    } else if (cursorName === css.water) {
         const x = parseInt($cell.attr("x"));
         const y = parseInt($cell.attr("y"));
-        
+
         this.graph.grid[x][y].weight = WALL;
         this.graph.nodes[x * this.opts.cols + y].weight = WALL;
-    } else if(cursorName === css.landscape) {
+    } else if (cursorName === css.landscape) {
         const x = parseInt($cell.attr("x"));
         const y = parseInt($cell.attr("y"));
-        
+
         this.graph.grid[x][y].weight = LANDSCAPE;
         this.graph.nodes[x * this.opts.cols + y].weight = LANDSCAPE;
     }
 
     $cell.addClass(`grid_item col p-0 ${cursorName}`);
     $cell.html(getGoogleIcon(cursorName));
-    $("body").css("cursor", "default");
 };
 
-GraphSearch.prototype.search = function() {
+GraphSearch.prototype.search = function () {
     // TODO: Fix this shit
     var sTime = performance ? performance.now() : new Date().getTime();
 
@@ -174,16 +216,16 @@ GraphSearch.prototype.search = function() {
     start = this.nodeFromElement($start);
 
     let $end = this.$cells.filter("." + css.finish),
-    end = this.nodeFromElement($end);
+        end = this.nodeFromElement($end);
 
     let path = astar.search(this.graph, start, end);
 
     console.log("Path", path);
 
     let fTime = performance ? performance.now() : new Date().getTime(),
-        duration = (fTime-sTime).toFixed(2);
+        duration = (fTime - sTime).toFixed(2);
 
-    if(path.length === 0) {
+    if (path.length === 0) {
         alert("couldn't find a path (" + duration + "ms)");
         $("#message").text("couldn't find a path (" + duration + "ms)");
         this.animateNoPath();
