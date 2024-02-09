@@ -18,7 +18,7 @@ $(function () {
     let opts = {
         rows: 10,
         cols: 10,
-        debug: true,
+        debug: false,
         diagonal: true,
     };
 
@@ -111,16 +111,19 @@ GraphSearch.prototype.initialize = function () {
             cursor.lastIndexOf(".")
         );
 
-        if(cursorName !== css.start && cursorName !== css.finish){
+        if (cursorName !== css.start && cursorName !== css.finish) {
             isDragging = true;
         }
-        
-        if(event.target.classList.contains('grid_item'))
+
+        if (event.target.classList.contains('grid_item')) {
             draggedCells.push(event.target);
-        else{
+            self.cellClicked($(event.target));
+        }
+        else {
             const targetCell = event.target.closest('.grid_item');
             if (targetCell) {
                 draggedCells.push(targetCell);
+                self.cellClicked($(targetCell));
             }
         }
     });
@@ -128,22 +131,21 @@ GraphSearch.prototype.initialize = function () {
     this.$cells.on('mousemove', function (event) {
         if (isDragging) {
             const hoveredCell = document.elementFromPoint(event.clientX, event.clientY);
+            let cell;
             if (hoveredCell && hoveredCell.classList.contains('grid_item')) {
-                if (!draggedCells.includes(hoveredCell)) {
-                    draggedCells.push(hoveredCell);
-                }
+                cell = hoveredCell;
+            } else if(hoveredCell) {
+                cell = hoveredCell.closest('.grid_item');
+            }
+            if (cell && !draggedCells.includes(cell)) {
+                draggedCells.push(cell);
+                self.cellClicked($(cell));
             }
         }
     });
 
     this.$cells.on('mouseup', function (event) {
         isDragging = false;
-        if(draggedCells.length !== 0) {
-            console.log(draggedCells);
-            for(let x in draggedCells){
-                self.cellClicked($(draggedCells[x]));
-            }
-        }
         draggedCells = [];
         $("body").css("cursor", "default");
     });
@@ -175,6 +177,7 @@ GraphSearch.prototype.cellClicked = function ($cell) {
     );
 
     $cell.removeClass();
+    $cell.html("");
 
     let $start = this.$cells.filter("." + css.start);
     let $end = this.$cells.filter("." + css.finish);
@@ -205,7 +208,8 @@ GraphSearch.prototype.cellClicked = function ($cell) {
     }
 
     $cell.addClass(`grid_item col p-0 ${cursorName}`);
-    $cell.html(getGoogleIcon(cursorName));
+    if(cursorName !== "")
+        $cell.html(getGoogleIcon(cursorName));
 };
 
 GraphSearch.prototype.search = function () {
