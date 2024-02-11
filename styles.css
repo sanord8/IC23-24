@@ -30,7 +30,7 @@
     background-color: #8b4513;
 }
 
-.grid_item.hiking {
+.grid_item.hiking:not(.active) {
     background-color: #259f29;
 }
 
@@ -38,6 +38,6 @@
     background-color: #2edb34;
 }
 
-.grid_item.flag {
+.grid_item.flag:not(.active) {
     background-color: #fcc200;
 }

@@ -1,5 +1,5 @@
 let WALL = 0,
-    LANDSCAPE = 2,
+    LANDSCAPE = 3,
     performance = window.performance;
 
 let isDragging = false;
@@ -152,7 +152,7 @@ GraphSearch.prototype.initialize = function () {
 };
 
 GraphSearch.prototype.drawDebugInfo = function () {
-    this.$cells.html(" ");
+    // this.$cells.html(" ");
     let that = this;
     if (this.opts.debug) {
         that.$cells.each(function () {
@@ -213,7 +213,6 @@ GraphSearch.prototype.cellClicked = function ($cell) {
 };
 
 GraphSearch.prototype.search = function () {
-    // TODO: Fix this shit
     var sTime = performance ? performance.now() : new Date().getTime();
 
     let $start = this.$cells.filter("." + css.start);
@@ -237,7 +236,7 @@ GraphSearch.prototype.search = function () {
     else {
         alert("search took " + duration + "ms.");
         $("#message").text("search took " + duration + "ms.");
-        this.drawDebugInfo();
+        // this.drawDebugInfo();
         this.animatePath(path);
     }
 }
@@ -269,24 +268,16 @@ GraphSearch.prototype.animatePath = function (path) {
         elementFromNode = function (node) {
             return grid[node.x][node.y];
         };
-
-    let self = this;
-    // will add start class if final
+    
     let removeClass = function (path, i) {
         if (i >= path.length) {
-            // finished removing path, set start positions
-            return setStartClass(path, i);
+            // finished removing path
+            return;
         }
         elementFromNode(path[i]).removeClass(css.active);
         setTimeout(function () {
             removeClass(path, i + 1);
         }, timeout * path[i].getCost());
-    };
-    let setStartClass = function (path, i) {
-        if (i === path.length) {
-            self.$graph.find("." + css.start).removeClass(css.start);
-            elementFromNode(path[i - 1]).addClass(css.start);
-        }
     };
     let addClass = function (path, i) {
         if (i >= path.length) {
@@ -300,11 +291,6 @@ GraphSearch.prototype.animatePath = function (path) {
     };
 
     addClass(path, 0);
-    this.$graph.find("." + css.start).removeClass(css.start);
-    this.$graph
-        .find("." + css.finish)
-        .removeClass(css.finish)
-        .addClass(css.start);
 };
 
 document.querySelectorAll("#icons .col").forEach((elem) => {

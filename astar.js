@@ -131,7 +131,6 @@
                 return d1 + d2;
             },
             diagonal: function (pos0, pos1) {
-                console.log(pos0, pos1);
                 let D = 1;
                 let D2 = Math.sqrt(2);
                 let d1 = Math.abs(pos1.x - pos0.x);
@@ -158,7 +157,7 @@
     function Graph(gridIn, options) {
         options = options || {};
         this.nodes = [];
-        this.diagonal = !!options.diagonal;
+        this.diagonal = true;
         this.grid = [];
         for (let x = 0; x < gridIn.length; x++) {
             this.grid[x] = [];
