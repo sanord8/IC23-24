@@ -208,8 +208,15 @@ GraphSearch.prototype.cellClicked = function ($cell) {
     }
 
     $cell.addClass(`grid_item col p-0 ${cursorName}`);
-    if(cursorName !== "")
+    if(cursorName !== ""){
         $cell.html(getGoogleIcon(cursorName));
+    } else {
+        const x = parseInt($cell.attr("x"));
+        const y = parseInt($cell.attr("y"));
+
+        this.graph.grid[x][y].weight = 1;
+        this.graph.nodes[x * this.opts.cols + y].weight = 1;
+    }
 };
 
 GraphSearch.prototype.search = function () {
