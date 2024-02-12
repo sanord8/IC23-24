@@ -206,6 +206,11 @@ GraphSearch.prototype.cellClicked = function ($cell) {
         this.graph.grid[x][y].weight = LANDSCAPE;
         this.graph.nodes[x * this.opts.cols + y].weight = LANDSCAPE;
     }
+    else if (cursorName === css.waypoint) {
+        //TODO HANDLE
+        const x = parseInt($cell.attr("x"));
+        const y = parseInt($cell.attr("y"));
+    }
 
     $cell.addClass(`grid_item col p-0 ${cursorName}`);
     if(cursorName !== ""){
@@ -218,7 +223,9 @@ GraphSearch.prototype.cellClicked = function ($cell) {
         this.graph.nodes[x * this.opts.cols + y].weight = 1;
     }
 };
-
+/**
+ * @author Nicolas Espinosa Mooser & Santiago Moral Santorio
+ */
 GraphSearch.prototype.search = function () {
     var sTime = performance ? performance.now() : new Date().getTime();
 
@@ -228,8 +235,33 @@ GraphSearch.prototype.search = function () {
     let $end = this.$cells.filter("." + css.finish),
         end = this.nodeFromElement($end);
 
-    let path = astar.search(this.graph, start, end);
+  //  let path = astar.search(this.graph, start, end);
 
+    let waypoints = this.$cells.filter("." + css.waypoint);
+    let waypointsReached = new Set();
+
+    waypoints = waypoints.add($start).add($end);
+    
+    
+    //console.log("Path", path);
+    let path = []; //we  construct partial paths to account for waypoints:
+
+    waypoints.each((index, waypoint) => {
+        let waypointNode = this.nodeFromElement($(waypoint));
+        if (!waypointNode) return; 
+
+        let partialPath = astar.search(this.graph, start, waypointNode);
+        if (partialPath.length > 0) {
+            path = path.concat(partialPath);
+            waypointsReached.add(waypointNode);
+            start = waypointNode;
+        }
+    });
+    let finalPartialPath = astar.search(this.graph, start, end);
+    
+    if (finalPartialPath.length > 0) {
+        path = path.concat(finalPartialPath);
+    }
     console.log("Path", path);
 
     let fTime = performance ? performance.now() : new Date().getTime(),
