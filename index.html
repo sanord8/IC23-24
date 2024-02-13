@@ -29,11 +29,11 @@
                 <div class="row">
                     <div class="mb-3">
                         <label for="rows" class="form-label">Rows</label>
-                        <input type="number" class="form-control" id="rows" min="1" max="100" value="10">
+                        <input type="number" class="form-control" id="rows" min="5" max="100" value="10">
                     </div>
                     <div class="mb-3">
                         <label for="cols" class="form-label">Columns</label>
-                        <input type="number" class="form-control" id="cols" min="1" max="100" value="10">
+                        <input type="number" class="form-control" id="cols" min="5" max="100" value="10">
                     </div>
                     <button id="btnGenerate" class="btn btn-primary">Generate board</button>
                 </div>
@@ -64,6 +64,8 @@
                 <form id="startSimulationForm" class="row mt-3 border-top g-3">
                     <button type="submit" class="btn btn-primary">Start</button>
                 </form>
+
+                <span id="message"></span>
             </div>
             <!-- Tablero -->
             <div class="col col-md-11">

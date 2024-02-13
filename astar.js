@@ -37,17 +37,11 @@
         * @param {Graph} graph
         * @param {GridNode} start
         * @param {GridNode} end
-        * @param {Object} [options]
-        * @param {bool} [options.closest] Specifies whether to return the
-                   path to the closest node if the target is unreachable.
-        * @param {Function} [options.heuristic] Heuristic function (see
-        *          astar.heuristics).
         */
-        search: function (graph, start, end, options) {
+        search: function (graph, start, end) {
             graph.cleanDirty();
-            options = options || {};
-            let heuristic = options.heuristic || astar.heuristics.diagonal;
-            let closest = options.closest || false;
+            let heuristic = astar.heuristics.diagonal;
+            let closest = false;
 
             let openHeap = getHeap();
             let closestNode = start; // set the start node to be the closest if required
@@ -149,11 +143,8 @@
     /**
      * A graph memory structure
      * @param {Array} gridIn 2D array of input weights
-     * @param {Object} [options]
-     * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
      */
-    function Graph(gridIn, options) {
-        options = options || {};
+    function Graph(gridIn) {
         this.nodes = [];
         this.diagonal = true;
         this.grid = [];

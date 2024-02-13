@@ -41,3 +41,8 @@
 .grid_item.flag:not(.active) {
     background-color: #fcc200;
 }
+
+#message {
+	color:#f00;
+	font-size:1.2em;
+}
