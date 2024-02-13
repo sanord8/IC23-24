@@ -17,6 +17,10 @@ VSCode con plugin Live Server
 - Whatsapp: Comunicación
 
 ## Implementación
+### General
+Se ha implementado un código de colores para poder diferenciar las diferentes casillas y sus estados. Los colores son los siguientes
+
+
 ### main.js
 Contiene la lógica prinicpal de la página.
 
@@ -77,7 +81,25 @@ Contiene los estilos de la página web (como por ejemplo colores  y reglas de di
 ### Waypoints
 Se pueden añadir puntos intermedios que el senderista debe visitar. Esto se realiza por cercanía, es decir, se visita primero el más cercano al senderista, y una vez alcanzado, se vuelve a calcular cuál es el más cercano, y así sucesivamente hasta llegar a la meta. Si uno de estos waypoints es inaccessible, se saltará al siguiente.
 
+**Caso Especial**
+![Waypoints Special Case](./Waypoint_SpecialCase.gif)
+La busqueda de waypoints se realiza por distancia desde el nodo inicial. Esto causa que en ciertos casos no se calcule el camino más corto.
+
 ### Terreno difícil
-Añadido de terreno difícil: Se puede añadir terreno difícil, que el senderista puede atravesar, pero con dificultad. Esto se realiza con un peso mayor a la celda convencional. Esto se consigue con un peso arbitrario de 3, haciendo que si atravesar una casilla difícil le ahorra al menos tres movimientos, el senderista lo hará.
+![Terreno difícil](./mountain.gif)
+Se puede añadir terreno difícil, que el senderista puede atravesar, pero con dificultad. Esto se realiza con un peso mayor a la celda convencional. Esto se consigue con un peso arbitrario de 3, haciendo que si atravesar una casilla difícil le ahorra al menos tres movimientos, el senderista lo hará.
 
 ## Ejemplos
+### Tablero 50x50
+![50x50 Board](./images/demo_50x50.gif)
+
+*Velocidad x4*
+
+*Tiempo de busqueda: 3.00ms*
+
+### Tablero 100x100
+![100x100 Board](./images/demo_100x100.gif)
+
+*Velocidad x1*
+
+*Tiempo de busqueda: 3.00ms*
