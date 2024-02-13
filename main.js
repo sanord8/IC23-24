@@ -52,7 +52,7 @@ const css = {
     finish: "flag",
     water: "water",
     landscape: "landscape",
-    waypoint: "waypoint"
+    waypoint: "camping"
 };
 
 function GraphSearch($graph, options, implementation) {
