@@ -237,17 +237,33 @@ GraphSearch.prototype.search = function () {
 
   //  let path = astar.search(this.graph, start, end);
 
-    let waypoints = this.$cells.filter("." + css.waypoint);
+    let waypoints = this.$cells.filter("." + css.waypoint).toArray();
     let waypointsReached = new Set();
 
-    waypoints = waypoints.add($start).add($end);
+    waypoints.unshift(this.nodeFromElement($start));
     
-    
+
+    let waypointNodes = waypoints.map(waypoint => this.nodeFromElement($(waypoint)));
+
+    // Sort waypoints based on distance from start
+    waypointNodes.sort((a, b) => {
+        let startX = this.nodeFromElement($start).x;
+        let startY = this.nodeFromElement($start).y;
+        let aX = a.x;
+        let aY = a.y;
+        let bX = b.x;
+        let bY = b.y;
+
+        let distanceA = Math.sqrt(Math.pow(aX - startX, 2) + Math.pow(aY - startY, 2));
+        let distanceB = Math.sqrt(Math.pow(bX - startX, 2) + Math.pow(bY - startY, 2));
+
+        return distanceA - distanceB;
+    });
+    waypoints.push(this.nodeFromElement($end));
     //console.log("Path", path);
     let path = []; //we  construct partial paths to account for waypoints:
 
-    waypoints.each((index, waypoint) => {
-        let waypointNode = this.nodeFromElement($(waypoint));
+    waypointNodes.forEach((waypointNode, index) => {
         if (!waypointNode) return; 
 
         let partialPath = astar.search(this.graph, start, waypointNode);
@@ -258,7 +274,7 @@ GraphSearch.prototype.search = function () {
         }
     });
     let finalPartialPath = astar.search(this.graph, start, end);
-    
+
     if (finalPartialPath.length > 0) {
         path = path.concat(finalPartialPath);
     }
@@ -268,13 +284,13 @@ GraphSearch.prototype.search = function () {
         duration = (fTime - sTime).toFixed(2);
 
     if (path.length === 0) {
-        alert("couldn't find a path (" + duration + "ms)");
+      //  alert("couldn't find a path (" + duration + "ms)");
         $("#message").text("couldn't find a path (" + duration + "ms)");
         this.animateNoPath();
     }
     else {
-        alert("search took " + duration + "ms.");
-        $("#message").text("search took " + duration + "ms.");
+      //  alert("search took " + duration + "ms.");
+     //   $("#message").text("search took " + duration + "ms.");
         // this.drawDebugInfo();
         this.animatePath(path);
     }
