@@ -1,6 +1,6 @@
 # Guía de usuario A*
 ## Interfaz del usuario:
-![user_interface](./userManual_01.png)
+![user_interface](./images/userManual_01.png)
 
 ### Selector
 El selector cuenta con varios parámetros que se pueden modificar para la ejecución del algoritmo A*:
@@ -9,7 +9,7 @@ El selector cuenta con varios parámetros que se pueden modificar para la ejecuc
 ##
 Después, tenemos los iconos:
 
-![user_icons](./userManual_02.png)
+![user_icons](./images/userManual_02.png)
 
 Que cumplen las siguientes funciones:
 - El icono del senderista es el punto de comienzo del algoritmo.
@@ -21,7 +21,7 @@ Que cumplen las siguientes funciones:
 ### Tablero 
 El tablero es el espacio donde se ejecuta el algoritmo A*. Se puede modificar el tamaño del tablero con el selector, y se puede modificar el terreno con los iconos. Cuando se ha encontrado un camino óptimo, este se marcará en el tablero con un color verde, que indicará las celdas visitadas por orden:
 
-![user_example](./userManual_03.png)
+![user_example](./images/userManual_03.png)
 
 En este ejemplo podemos observar como el senderista ha encontrado el camino óptimo para llegar a la bandera, pasando por los waypoints y evitando los obstáculos. En caso de que un obstaculo con un peso excesivo lo salve de dar un rodeo, el senderista atraveserá el terreno difícil, si así consigue mejor tiempo.
 

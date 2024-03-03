@@ -82,11 +82,11 @@ Contiene los estilos de la página web (como por ejemplo colores  y reglas de di
 Se pueden añadir puntos intermedios que el senderista debe visitar. Esto se realiza por cercanía, es decir, se visita primero el más cercano al senderista, y una vez alcanzado, se vuelve a calcular cuál es el más cercano, y así sucesivamente hasta llegar a la meta. Si uno de estos waypoints es inaccessible, se saltará al siguiente.
 
 **Caso Especial**
-![Waypoints Special Case](./Waypoint_SpecialCase.gif)
+![Waypoints Special Case](./images/Waypoint_SpecialCase.gif)
 La busqueda de waypoints se realiza por distancia desde el nodo inicial. Esto causa que en ciertos casos no se calcule el camino más corto.
 
 ### Terreno difícil
-![Terreno difícil](./mountain.gif)
+![Terreno difícil](./images/mountain.gif)
 Se puede añadir terreno difícil, que el senderista puede atravesar, pero con dificultad. Esto se realiza con un peso mayor a la celda convencional. Esto se consigue con un peso arbitrario de 3, haciendo que si atravesar una casilla difícil le ahorra al menos tres movimientos, el senderista lo hará.
 
 ## Ejemplos
