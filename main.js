@@ -43,10 +43,10 @@ $(function () {
 
   $("#btnGenerate").click(function () {
     grid.setOption({
-      rows: $inputGridRows.val() < minRowsCols ? minRowsCols : $(this).val(),
+      rows: $inputGridRows.val() < minRowsCols ? minRowsCols : $inputGridRows.val(),
     });
     grid.setOption({
-      cols: $inputGridCols.val() < minRowsCols ? minRowsCols : $(this).val(),
+      cols: $inputGridCols.val() < minRowsCols ? minRowsCols : $inputGridCols.val(),
     });
     grid.initialize();
   });
